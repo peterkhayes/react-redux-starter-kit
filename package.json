@@ -75,11 +75,13 @@
     "koa-static": "^2.0.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
+    "react-flexbox-layout": "^1.1.2",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0-beta",
     "redux": "^3.0.0",
     "redux-thunk": "^1.0.0",
+    "superagent": "^1.7.2",
     "url": "^0.11.0",
     "yargs": "^3.18.0"
   },
