@@ -1,6 +1,6 @@
-import { applyMiddleware, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './rootReducer';
+import { applyMiddleware, compose, createStore } from "redux";
+import thunk from "redux-thunk";
+import rootReducer from "reducers";
 
 export default function configureStore (initialState = {}) {
   // Compose final middleware and use devtools in debug environment
@@ -8,7 +8,7 @@ export default function configureStore (initialState = {}) {
   if (__DEBUG__) {
     const devTools = window.devToolsExtension
       ? window.devToolsExtension()
-      : require('./components/DevTools').default.instrument();
+      : require("./components/dev_tools").default.instrument();
     middleware = compose(middleware, devTools);
   }
 
@@ -16,8 +16,8 @@ export default function configureStore (initialState = {}) {
   const store = middleware(createStore)(rootReducer, initialState);
 
   if (module.hot) {
-    module.hot.accept('./rootReducer', () => {
-      const nextRootReducer = require('./rootReducer').default;
+    module.hot.accept("reducers", () => {
+      const nextRootReducer = require("reducers").default;
 
       store.replaceReducer(nextRootReducer);
     });

@@ -1,17 +1,17 @@
 // Code copied from https://github.com/popomore/koa-proxy
 // Copyright (c) 2014 popomore. Licensed under the MIT license.
 
-'use strict';
+"use strict";
 
-var join = require('url').resolve;
-var iconv = require('iconv-lite');
-var request = require('co-request').defaults({ jar: true });
+var join = require("url").resolve;
+var iconv = require("iconv-lite");
+var request = require("co-request").defaults({ jar: true });
 
 module.exports = function (options) {
   options || (options = {});
 
   if (!(options.host || options.map || options.url)) {
-    throw new Error('miss options');
+    throw new Error("miss options");
   }
 
   return function * proxy (next) {
@@ -34,14 +34,14 @@ module.exports = function (options) {
     var parsedBody = getParsedBody(this);
 
     var opt = {
-      url: url + '?' + this.querystring,
+      url: url + "?" + this.querystring,
       headers: this.header,
       encoding: null,
       method: this.method,
       body: parsedBody
     };
     // set 'Host' header to options.host (without protocol prefix)
-    if (options.host) opt.headers.host = options.host.slice(options.host.indexOf('://') + 3);
+    if (options.host) opt.headers.host = options.host.slice(options.host.indexOf("://") + 3);
 
     var requestThunk = request(opt);
 
@@ -59,8 +59,8 @@ module.exports = function (options) {
       this.set(name, res.headers[name]);
     }
 
-    if (options.encoding === 'gbk') {
-      this.body = iconv.decode(res.body, 'gbk');
+    if (options.encoding === "gbk") {
+      this.body = iconv.decode(res.body, "gbk");
       return;
     }
 
@@ -77,11 +77,11 @@ function resolve (path, options) {
     return ignoreQuery(url);
   }
 
-  if (typeof options.map === 'object') {
+  if (typeof options.map === "object") {
     if (options.map && options.map[path]) {
       path = ignoreQuery(options.map[path]);
     }
-  } else if (typeof options.map === 'function') {
+  } else if (typeof options.map === "function") {
     path = options.map(path);
   }
 
@@ -89,7 +89,7 @@ function resolve (path, options) {
 }
 
 function ignoreQuery (url) {
-  return url ? url.split('?')[0] : null;
+  return url ? url.split("?")[0] : null;
 }
 
 function getParsedBody (ctx) {
@@ -97,12 +97,12 @@ function getParsedBody (ctx) {
   if (body === undefined || body === null) {
     return undefined;
   }
-  var contentType = ctx.request.header['content-type'];
-  if (!Buffer.isBuffer(body) && typeof body !== 'string') {
-    if (contentType && contentType.indexOf('json') !== -1) {
+  var contentType = ctx.request.header["content-type"];
+  if (!Buffer.isBuffer(body) && typeof body !== "string") {
+    if (contentType && contentType.indexOf("json") !== -1) {
       body = JSON.stringify(body);
     } else {
-      body = body + '';
+      body = body + "";
     }
   }
   return body;

@@ -1,29 +1,29 @@
-import webpack from 'webpack';
-import cssnano from 'cssnano';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import config from '../config';
-import _debug from 'debug';
+import webpack from "webpack";
+import cssnano from "cssnano";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import ExtractTextPlugin from "extract-text-webpack-plugin";
+import config from "../config";
+import _debug from "debug";
 
-const debug = _debug('app:webpack:config');
+const debug = _debug("app:webpack:config");
 const paths = config.utils_paths;
 const {__DEV__, __PROD__, __TEST__} = config.globals;
 
-debug('Create configuration.');
+debug("Create configuration.");
 const webpackConfig = {
-  name: 'client',
-  target: 'web',
+  name: "client",
+  target: "web",
   devtool: config.compiler_devtool,
   resolve: {
     root: paths.base(config.dir_client),
-    extensions: ['', '.js', '.jsx']
+    extensions: ["", ".js", ".jsx"]
   },
   module: {}
 };
 // ------------------------------------
 // Entry Points
 // ------------------------------------
-const APP_ENTRY_PATH = paths.base(config.dir_client) + '/main.js';
+const APP_ENTRY_PATH = paths.base(config.dir_client) + "/main.js";
 
 webpackConfig.entry = {
   app: __DEV__
@@ -47,11 +47,11 @@ webpackConfig.output = {
 webpackConfig.plugins = [
   new webpack.DefinePlugin(config.globals),
   new HtmlWebpackPlugin({
-    template: paths.client('index.html'),
+    template: paths.client("index.html"),
     hash: false,
-    favicon: paths.client('static/favicon.ico'),
-    filename: 'index.html',
-    inject: 'body',
+    favicon: paths.client("static/favicon.ico"),
+    filename: "index.html",
+    inject: "body",
     minify: {
       collapseWhitespace: true
     }
@@ -59,13 +59,13 @@ webpackConfig.plugins = [
 ];
 
 if (__DEV__) {
-  debug('Enable plugins for live development (HMR, NoErrors).');
+  debug("Enable plugins for live development (HMR, NoErrors).");
   webpackConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
 } else if (__PROD__) {
-  debug('Enable plugins for production (OccurenceOrder, Dedupe & UglifyJS).');
+  debug("Enable plugins for production (OccurenceOrder, Dedupe & UglifyJS).");
   webpackConfig.plugins.push(
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
@@ -82,7 +82,7 @@ if (__DEV__) {
 // Don't split bundles during testing, since we only want import one bundle
 if (!__TEST__) {
   webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor']
+    names: ["vendor"]
   }));
 }
 
@@ -91,12 +91,12 @@ if (!__TEST__) {
 // ------------------------------------
 webpackConfig.module.preLoaders = [{
   test: /\.(js|jsx)$/,
-  loader: 'eslint',
+  loader: "eslint",
   exclude: /node_modules/
 }];
 
 webpackConfig.eslint = {
-  configFile: paths.base('.eslintrc'),
+  configFile: paths.base(".eslintrc"),
   emitWarning: __DEV__
 };
 
@@ -107,30 +107,30 @@ webpackConfig.eslint = {
 webpackConfig.module.loaders = [{
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loader: 'babel',
+  loader: "babel",
   query: {
     cacheDirectory: true,
-    plugins: ['transform-runtime'],
-    presets: ['es2015', 'react', 'stage-0'],
+    plugins: ["transform-runtime"],
+    presets: ["es2015", "react", "stage-0"],
     env: {
       development: {
         plugins: [
-          ['react-transform', {
+          ["react-transform", {
             transforms: [{
-              transform: 'react-transform-hmr',
-              imports: ['react'],
-              locals: ['module']
+              transform: "react-transform-hmr",
+              imports: ["react"],
+              locals: ["module"]
             }, {
-              transform: 'react-transform-catch-errors',
-              imports: ['react', 'redbox-react']
+              transform: "react-transform-catch-errors",
+              imports: ["react", "redbox-react"]
             }]
           }]
         ]
       },
       production: {
         plugins: [
-          'transform-react-remove-prop-types',
-          'transform-react-constant-elements'
+          "transform-react-remove-prop-types",
+          "transform-react-constant-elements"
         ]
       }
     }
@@ -138,7 +138,7 @@ webpackConfig.module.loaders = [{
 },
 {
   test: /\.json$/,
-  loader: 'json'
+  loader: "json"
 }];
 
 // ------------------------------------
@@ -147,10 +147,10 @@ webpackConfig.module.loaders = [{
 
 // We use cssnano with the postcss loader, so we tell
 // css-loader not to duplicate minimization.
-const BASE_CSS_LOADER = 'css?sourceMap&-minimize';
+const BASE_CSS_LOADER = "css?sourceMap&-minimize";
 
 webpackConfig.sassLoader = {
-  includePaths: paths.client('styles')
+  includePaths: paths.client("styles")
 };
 
 webpackConfig.postcss = [
@@ -158,7 +158,7 @@ webpackConfig.postcss = [
     autoprefixer: {
       add: true,
       remove: true,
-      browsers: ['last 2 versions']
+      browsers: ["last 2 versions"]
     },
     discardComments: {
       removeAll: true
@@ -174,26 +174,26 @@ webpackConfig.postcss = [
 if (config.compiler_css_modules) {
   const cssModulesLoader = [
     BASE_CSS_LOADER,
-    'modules',
-    'importLoaders=1',
-    'localIdentName=[name]__[local]___[hash:base64:5]'
-  ].join('&');
+    "modules",
+    "importLoaders=1",
+    "localIdentName=[name]__[local]___[hash:base64:5]"
+  ].join("&");
 
   // What files do we want to treat as CSS modules? By default, we
   // only treat all files in this project's /src/ directory as
   // CSS modules.
-  const cssModulesPaths = new RegExp('(' + [
+  const cssModulesPaths = new RegExp("(" + [
     paths.base(config.dir_client)
-  ].join('|') + ')');
+  ].join("|") + ")");
 
   webpackConfig.module.loaders.push({
     test: /\.scss$/,
     include: cssModulesPaths,
     loaders: [
-      'style',
+      "style",
       cssModulesLoader,
-      'postcss',
-      'sass?sourceMap'
+      "postcss",
+      "sass?sourceMap"
     ]
   });
 
@@ -201,9 +201,9 @@ if (config.compiler_css_modules) {
     test: /\.css$/,
     include: cssModulesPaths,
     loaders: [
-      'style',
+      "style",
       cssModulesLoader,
-      'postcss'
+      "postcss"
     ]
   });
 
@@ -212,19 +212,19 @@ if (config.compiler_css_modules) {
     test: /\.scss$/,
     exclude: cssModulesPaths,
     loaders: [
-      'style',
+      "style",
       BASE_CSS_LOADER,
-      'postcss',
-      'sass?sourceMap'
+      "postcss",
+      "sass?sourceMap"
     ]
   });
   webpackConfig.module.loaders.push({
     test: /\.css$/,
     exclude: cssModulesPaths,
     loaders: [
-      'style',
+      "style",
       BASE_CSS_LOADER,
-      'postcss'
+      "postcss"
     ]
   });
 }
@@ -236,19 +236,19 @@ if (!config.compiler_css_modules) {
   webpackConfig.module.loaders.push({
     test: /\.scss$/,
     loaders: [
-      'style',
+      "style",
       BASE_CSS_LOADER,
-      'postcss',
-      'sass?sourceMap'
+      "postcss",
+      "sass?sourceMap"
     ]
   });
 
   webpackConfig.module.loaders.push({
     test: /\.css$/,
     loaders: [
-      'style',
+      "style",
       BASE_CSS_LOADER,
-      'postcss'
+      "postcss"
     ]
   });
 }
@@ -273,17 +273,17 @@ webpackConfig.module.loaders.push(
 // need to use the extractTextPlugin to fix this issue:
 // http://stackoverflow.com/questions/34133808/webpack-ots-parsing-error-loading-fonts/34133809#34133809
 if (!__DEV__) {
-  debug('Apply ExtractTextPlugin to CSS loaders.');
+  debug("Apply ExtractTextPlugin to CSS loaders.");
   webpackConfig.module.loaders.filter((loader) =>
-    loader.loaders && loader.loaders.find((name) => /css/.test(name.split('?')[0]))
+    loader.loaders && loader.loaders.find((name) => /css/.test(name.split("?")[0]))
   ).forEach((loader) => {
     const [first, ...rest] = loader.loaders;
-    loader.loader = ExtractTextPlugin.extract(first, rest.join('!'));
+    loader.loader = ExtractTextPlugin.extract(first, rest.join("!"));
     delete loader.loaders;
   });
 
   webpackConfig.plugins.push(
-    new ExtractTextPlugin('[name].[contenthash].css', {
+    new ExtractTextPlugin("[name].[contenthash].css", {
       allChunks: true
     })
   );

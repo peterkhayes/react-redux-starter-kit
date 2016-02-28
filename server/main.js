@@ -1,16 +1,16 @@
-import Koa from 'koa';
-import convert from 'koa-convert';
-import webpack from 'webpack';
-import webpackConfig from '../build/webpack.config';
-import historyApiFallback from 'koa-connect-history-api-fallback';
-import serve from 'koa-static';
-import _debug from 'debug';
-import config from '../config';
-import webpackProxyMiddleware from './middleware/webpack-proxy';
-import webpackDevMiddleware from './middleware/webpack-dev';
-import webpackHMRMiddleware from './middleware/webpack-hmr';
+import Koa from "koa";
+import convert from "koa-convert";
+import webpack from "webpack";
+import webpackConfig from "../build/webpack.config";
+import historyApiFallback from "koa-connect-history-api-fallback";
+import serve from "koa-static";
+import _debug from "debug";
+import config from "../config";
+import webpackProxyMiddleware from "./middleware/webpack-proxy";
+import webpackDevMiddleware from "./middleware/webpack-dev";
+import webpackHMRMiddleware from "./middleware/webpack-hmr";
 
-const debug = _debug('app:server');
+const debug = _debug("app:server");
 const paths = config.utils_paths;
 const app = new Koa();
 
@@ -24,7 +24,7 @@ app.use(convert(historyApiFallback({
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
-if (config.env === 'development') {
+if (config.env === "development") {
   const compiler = webpack(webpackConfig);
 
   // Enable webpack-dev and webpack-hot middleware
@@ -42,13 +42,13 @@ if (config.env === 'development') {
   // these files. This middleware doesn't need to be enabled outside
   // of development since this directory will be copied into ~/dist
   // when the application is compiled.
-  app.use(convert(serve(paths.client('static'))));
+  app.use(convert(serve(paths.client("static"))));
 } else {
   debug(
-    'Server is being run outside of live development mode. This starter kit ' +
-    'does not provide any production-ready server functionality. To learn ' +
-    'more about deployment strategies, check out the "deployment" section ' +
-    'in the README.'
+    "Server is being run outside of live development mode. This starter kit " +
+    "does not provide any production-ready server functionality. To learn " +
+    "more about deployment strategies, check out the \"deployment\" section " +
+    "in the README."
   );
 
   // Serving ~/dist by default. Ideally these files should be served by

@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
-import { useRouterHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-import makeRoutes from './routes';
-import Root from './redux/components/Root';
-import configureStore from './redux/configureStore';
+import React                    from "react";
+import ReactDOM                 from "react-dom";
+import createBrowserHistory     from "history/lib/createBrowserHistory";
+import { useRouterHistory }     from "react-router";
+import { syncHistoryWithStore } from "react-router-redux";
+import makeRoutes               from "./routes";
+import Root                     from "./redux/components/Root";
+import configureStore           from "./redux/configureStore";
 
 // Create redux store and sync with react-router-redux. We have installed the
 // react-router-redux reducer under the key "router" in src/routes/index.js,
@@ -31,5 +31,5 @@ const routes = makeRoutes(store);
 // React application to the DOM!
 ReactDOM.render(
   <Root history={history} routes={routes} store={store} />,
-  document.getElementById('root')
+  document.getElementById("root")
 );

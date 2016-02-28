@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
-import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import React, { PropTypes } from "react";
+import { Provider } from "react-redux";
+import { Router } from "react-router";
 
 export default class Root extends React.Component {
   static propTypes = {
@@ -21,12 +21,12 @@ export default class Root extends React.Component {
     if (__DEBUG__) {
       if (__DEBUG_NEW_WINDOW__) {
         if (!window.devToolsExtension) {
-          require('../utils/createDevToolsWindow').default(this.props.store);
+          require("../utils/create_dev_tools_window").default(this.props.store);
         } else {
           window.devToolsExtension.open();
         }
       } else if (!window.devToolsExtension) {
-        const DevTools = require('./DevTools').default;
+        const DevTools = require("./dev_tools").default;
         return <DevTools />;
       }
     }
@@ -35,7 +35,7 @@ export default class Root extends React.Component {
   render () {
     return (
       <Provider store={this.props.store}>
-        <div style={{ height: '100%' }}>
+        <div style={{ height: "100%" }}>
           {this.content}
           {this.devTools}
         </div>

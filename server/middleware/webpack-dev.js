@@ -1,13 +1,13 @@
-import WebpackDevMiddleware from 'webpack-dev-middleware';
-import applyExpressMiddleware from '../lib/apply-express-middleware';
-import _debug from 'debug';
-import config from '../../config';
+import WebpackDevMiddleware from "webpack-dev-middleware";
+import applyExpressMiddleware from "../lib/apply-express-middleware";
+import _debug from "debug";
+import config from "../../config";
 
 const paths = config.utils_paths;
-const debug = _debug('app:server:webpack-dev');
+const debug = _debug("app:server:webpack-dev");
 
 export default function (compiler, publicPath) {
-  debug('Enable webpack dev middleware.');
+  debug("Enable webpack dev middleware.");
 
   const middleware = WebpackDevMiddleware(compiler, {
     publicPath,
