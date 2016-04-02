@@ -1,4 +1,3 @@
-import _ from "lodash";
 import superagent from "superagent";
 
 import {
@@ -17,12 +16,9 @@ export default ({dispatch, getState}) => (next) => (action) => {
   // Dispatch request action.
   dispatch({type: type.request, payload});
 
-  // If API Call property is a thunk, call it with the state.
-  if (_.isFunction(apiCall)) apiCall = apiCall(getState());
-
   const {path, body, query, headers, parser} = apiCall;
-  const method = (apiCall.method || "get").toLowerCase().replace("delete", "del");
 
+  const method = (apiCall.method || "get").toLowerCase().replace("delete", "del");
   return new Promise((resolve, reject) => {
    
     function done (action) {
@@ -36,9 +32,10 @@ export default ({dispatch, getState}) => (next) => (action) => {
     }
 
     superagent[method](path)
-      .set(headers)
-      .query(query)
-      .send(body)
+      .set(headers || {})
+      .query(query || {})
+      .send(body || {})
+      .withCredentials()
       .end((_, response) => {
         if (!response) {
           return fail({type: API_UNREACHABLE, payload});

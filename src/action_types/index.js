@@ -1,5 +1,5 @@
 const asyncActions = [
-
+  "EXAMPLE_API_ACTION"
 ];
 
 const syncActions = [

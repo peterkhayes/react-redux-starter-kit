@@ -21,12 +21,12 @@ export default class Root extends React.Component {
     if (__DEBUG__) {
       if (__DEBUG_NEW_WINDOW__) {
         if (!window.devToolsExtension) {
-          require("../utils/create_dev_tools_window").default(this.props.store);
+          require("dev_tools/create_dev_tools_window").default(this.props.store);
         } else {
           window.devToolsExtension.open();
         }
       } else if (!window.devToolsExtension) {
-        const DevTools = require("./dev_tools").default;
+        const DevTools = require("dev_tools/dev_tools").default;
         return <DevTools />;
       }
     }
