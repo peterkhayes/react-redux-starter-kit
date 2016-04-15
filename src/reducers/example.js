@@ -1,3 +1,4 @@
+import ih            from "ih";
 import matchesAction from "./utils/matches_action";
 import TYPES         from "action_types";
 
@@ -9,12 +10,13 @@ const initialState = {
 export default function googleReducer (state = initialState, action) {
 
   if (matchesAction(action, TYPES.EXAMPLE_API_ACTION.request)) {
-    return {...state, query: action.payload.query, items: null};
+    state = ih.set(state, "query", action.payload.query);
+    state = ih.without(state, "items"); 
   }
 
   if (matchesAction(action, TYPES.EXAMPLE_API_ACTION.done)) {
     if (action.payload.query === state.query) {
-      return {...state, items: action.apiResponse};
+      state = ih.set(state, "items", action.apiResponse);
     }
   }
 
